@@ -9,6 +9,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: grant exec
-        run: chmod +x "${GITHUB_WORKSPACE}/.github/workflows/test-json-returns.sh"
+        run: chmod +x ".github/workflows/test-json-returns.sh"
       - name: exec test json
-        run: "${GITHUB_WORKSPACE}/.github/workflows/test-json-returns.sh"
+        run: ".github/workflows/test-json-returns.sh"
