@@ -1,0 +1,5 @@
+# Ignore GoLand files
+.idea
+
+# Ignore VSCode files
+.vscode
