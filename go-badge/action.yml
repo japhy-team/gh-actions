@@ -1,0 +1,49 @@
+name: 'Go Test, Build, and Coverage'
+description: 'Runs tests, builds, and generates coverage reports for Go projects'
+
+inputs:
+  go-version:
+    description: 'The Go version to use'
+    required: false
+    default: '1.23'
+  gh-go-modules-user:
+    description: 'GitHub user for private Go modules'
+    required: true
+  gh-go-modules-pat:
+    description: 'GitHub PAT for private Go modules'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Go Coverage Badge
+      uses: tj-actions/coverage-badge-go@v2
+      with:
+        filename: coverage_full.out
+
+    - name: Verify Changed files
+      uses: tj-actions/verify-changed-files@v16
+      id: verify-changed-files
+      with:
+        files: README.md
+
+    - name: Commit changes
+      if: steps.verify-changed-files.outputs.files_changed == 'true'
+      shell: bash
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git fetch --all
+        git checkout ${{ github.head_ref }}
+        git pull --force origin ${{ github.head_ref }}
+        git add README.md
+        git commit -m "chore: Updated coverage badge."
+        git status
+        git push origin ${{ github.head_ref }}
+
+    - name: Push changes
+      if: steps.verify-changed-files.outputs.files_changed == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ inputs.gh-go-modules-pat }}
+        branch: ${{ github.head_ref }}

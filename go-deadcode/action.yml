@@ -1,0 +1,23 @@
+name: 'Go Test, Build, and Coverage'
+description: 'Runs tests, builds, and generates coverage reports for Go projects'
+
+inputs:
+  go-version:
+    description: 'The Go version to use'
+    required: false
+    default: '1.23'
+  gh-go-modules-user:
+    description: 'GitHub user for private Go modules'
+    required: true
+  gh-go-modules-pat:
+    description: 'GitHub PAT for private Go modules'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Test deadcode
+      shell: bash
+      run: |
+        go install golang.org/x/tools/cmd/deadcode@latest
+        make deadcode
