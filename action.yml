@@ -17,13 +17,26 @@ runs:
   using: "composite"
   steps:
     - name: GO Test & Build
-      uses: ./go-test-n-build
+      uses: japhy-team/gh-actions/go-test-n-build@main
+      with:
+        go-version: ${{ inputs.go-version }}
+        gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
+        gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
 
     - name: GO Badge
-      uses: ./go-badge
+      uses: japhy-team/gh-actions/go-badge@main
+      with:
+        gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
+        gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
 
     - name: Go Coverage Report
-      uses: ./go-coverage-report
+      uses: japhy-team/gh-actions/go-coverage-report@main
+      with:
+        gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
+        gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
 
     - name: GO Deadcode
-      uses: ./go-deadcode
+      uses: japhy-team/gh-actions/go-deadcode@main
+      with:
+        gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
+        gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
