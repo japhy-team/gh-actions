@@ -19,8 +19,11 @@ runs:
     - name: GO Test & Build
       uses: ./go-test-n-build
 
-    - name: GO Deadcode
-      uses: ./go-deadcode
-
     - name: GO Badge
       uses: ./go-badge
+
+    - name: Go Coverage Report
+      uses: ./go-coverage-report
+
+    - name: GO Deadcode
+      uses: ./go-deadcode
