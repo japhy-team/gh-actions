@@ -18,16 +18,16 @@ runs:
     if: github.event_name == 'pull_request'
     using: "composite"
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+  - name: Checkout
+    uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: ${{ inputs.go-version }}
+  - name: Set up Go
+    uses: actions/setup-go@v4
+    with:
+      go-version: ${{ inputs.go-version }}
 
-    - name: Report
-    - uses: fgrosse/go-coverage-report@v1.0.2
-      with:
-        coverage-artifact-name: "code-coverage"
-        coverage-file-name: "coverage.out"
+  - name: Report
+    uses: fgrosse/go-coverage-report@v1.0.2
+    with:
+      coverage-artifact-name: "code-coverage"
+      coverage-file-name: "coverage.out"
