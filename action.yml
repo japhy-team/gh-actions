@@ -30,7 +30,7 @@ runs:
         gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
 
     - name: Go Coverage Report
-      uses: japhy-team/gh-actions/go-coverage-report@main
+      uses: japhy-team/gh-actions/go-coverage-report@rdu-24-10-deadcode-fix-action
       with:
         gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
         gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
