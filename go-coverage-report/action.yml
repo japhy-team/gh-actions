@@ -14,10 +14,8 @@ inputs:
     required: true
 
 runs:
-  - name: "Code coverage report"
-    if: github.event_name == 'pull_request'
-    using: "composite"
-    steps:
+  using: "composite"
+  steps:
   - name: Checkout
     uses: actions/checkout@v4
 
