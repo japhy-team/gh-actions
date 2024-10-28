@@ -26,8 +26,6 @@ runs:
 
     - name: "Code coverage report"
       if: github.event_name == 'pull_request'
-      runs-on: self-hosted
-      needs: test
       steps:
         - uses: fgrosse/go-coverage-report@v1.0.2
           with:
