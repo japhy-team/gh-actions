@@ -20,13 +20,10 @@ runs:
       uses: ./go-test-n-build
 
     - name: GO Badge
-      needs: GO Test & Build
       uses: ./go-badge
 
     - name: Go Coverage Report
-      needs: GO Test & Build
       uses: ./go-coverage-report
 
     - name: GO Deadcode
-      needs: GO Test & Build
       uses: ./go-deadcode
