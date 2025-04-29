@@ -24,7 +24,7 @@ runs:
     with:
       go-version: ${{ inputs.go-version }}
 
-  - name: Report
+  - name: code-coverage
     uses: fgrosse/go-coverage-report@v1.2.0
     with:
       coverage-artifact-name: "code-coverage"
