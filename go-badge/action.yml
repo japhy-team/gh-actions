@@ -16,6 +16,11 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Download coverage artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: code-coverage
+
     - name: Go Coverage Badge
       uses: tj-actions/coverage-badge-go@v2
       with:
