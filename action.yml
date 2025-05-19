@@ -40,3 +40,8 @@ runs:
       with:
         gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
         gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
+    - name: GO modules check
+      uses: japhy-team/gh-actions/go-mod-check-branch@rdu-25-05-add-check-main
+      with:
+        gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
+        gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
