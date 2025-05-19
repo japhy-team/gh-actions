@@ -1,0 +1,33 @@
+name: 'Go Module Branch Validator'
+description: 'Ensures all github.com/japhy-team/* dependencies use commits from the main branch'
+
+inputs:
+  go-version:
+    description: 'The Go version to use'
+    required: false
+    default: '1.23'
+  gh-go-modules-user:
+    description: 'GitHub user for private Go modules'
+    required: true
+  gh-go-modules-pat:
+    description: 'GitHub PAT for private Go modules'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: stable
+
+    - name: Set up Go modules authentication
+      shell: bash
+      run: |
+        go get github.com/japhy-team/ruben
+        go install github.com/japhy-team/ruben && ruben
+        ruben module-main-check
+        go mod tidy
