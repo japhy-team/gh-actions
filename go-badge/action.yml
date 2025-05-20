@@ -20,12 +20,11 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: code-coverage
-        path: coverage.out
 
     - name: Go Coverage Badge
       uses: tj-actions/coverage-badge-go@v2
       with:
-        filename: coverage.out
+        filename: coverage_full.out
 
     - name: Verify Changed files
       uses: tj-actions/verify-changed-files@v16
