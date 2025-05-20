@@ -20,6 +20,7 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: code-coverage
+        path: coverage.out
 
     - name: Go Coverage Badge
       uses: tj-actions/coverage-badge-go@v2
@@ -45,10 +46,3 @@ runs:
         git commit -m "chore: Updated coverage badge."
         git status
         git push origin ${{ github.head_ref }}
-
-    - name: Push changes
-      if: steps.verify-changed-files.outputs.files_changed == 'true'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ inputs.gh-go-modules-pat }}
-        branch: ${{ github.head_ref }}
