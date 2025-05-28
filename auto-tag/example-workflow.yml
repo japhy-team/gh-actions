@@ -1,0 +1,37 @@
+# Example workflow for using the auto-tag action
+# Place this file in .github/workflows/auto-tag.yml in your repository
+
+name: Auto Tag on Merge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  auto-tag:
+    runs-on: ubuntu-latest
+    # Skip if commit message contains [skip-tag]
+    if: ${{ !contains(github.event.head_commit.message, '[skip-tag]') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to access git history
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto Tag
+        uses: japhy-team/gh-actions/auto-tag@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          tag-prefix: "v"
+          default-bump: "patch"
+
+      # Optional: Use outputs in subsequent steps
+      - name: Print results
+        run: |
+          echo "New version: ${{ steps.auto-tag.outputs.new-version }}"
+          echo "Previous version: ${{ steps.auto-tag.outputs.previous-version }}"
+          echo "Bump type: ${{ steps.auto-tag.outputs.bump-type }}"
+          echo "Tag created: ${{ steps.auto-tag.outputs.tag-created }}"
