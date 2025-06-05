@@ -1,16 +1,16 @@
-name: 'Go Test, Build, and Coverage'
-description: 'Runs tests, builds, and generates coverage reports for Go projects'
+name: "Go Test, Build, and Coverage"
+description: "Runs tests, builds, and generates coverage reports for Go projects"
 
 inputs:
   go-version:
-    description: 'The Go version to use'
+    description: "The Go version to use"
     required: false
-    default: '1.23'
+    default: "1.23"
   gh-go-modules-user:
-    description: 'GitHub user for private Go modules'
+    description: "GitHub user for private Go modules"
     required: true
   gh-go-modules-pat:
-    description: 'GitHub PAT for private Go modules'
+    description: "GitHub PAT for private Go modules"
     required: true
 
 runs:
@@ -24,7 +24,7 @@ runs:
     - name: Go Coverage Badge
       uses: tj-actions/coverage-badge-go@v2
       with:
-        filename: coverage_full.out
+        filename: coverage.out
 
     - name: Verify Changed files
       uses: tj-actions/verify-changed-files@v16
