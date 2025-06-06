@@ -36,5 +36,7 @@ runs:
     - name: Archive code coverage results
       uses: actions/upload-artifact@v4
       with:
-        name: code-coverage
-        path: coverage.out
+      name: code-coverage
+      path: |
+        coverage.out
+        coverage_full.out
