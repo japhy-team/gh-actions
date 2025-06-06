@@ -1,16 +1,16 @@
-name: 'Go Test, Build, and Coverage'
-description: 'Runs tests, builds, and generates coverage reports for Go projects'
+name: "Go Test, Build, and Coverage"
+description: "Runs tests, builds, and generates coverage reports for Go projects"
 
 inputs:
   go-version:
-    description: 'The Go version to use'
+    description: "The Go version to use"
     required: false
-    default: '1.23'
+    default: "1.23"
   gh-go-modules-user:
-    description: 'GitHub user for private Go modules'
+    description: "GitHub user for private Go modules"
     required: true
   gh-go-modules-pat:
-    description: 'GitHub PAT for private Go modules'
+    description: "GitHub PAT for private Go modules"
     required: true
 
 runs:
@@ -37,4 +37,6 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: code-coverage
-        path: coverage.out
+        path: |
+          coverage.out
+          coverage_full.out
