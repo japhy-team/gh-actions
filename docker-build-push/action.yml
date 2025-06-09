@@ -1,0 +1,102 @@
+name: "Docker Build and Push"
+description: "Builds and pushes Docker images to GitHub Container Registry"
+
+inputs:
+  checkout-ref:
+    description: "The git reference to checkout (commit, tag, or branch)"
+    required: false
+    default: ""
+  registry:
+    description: "Container registry URL"
+    required: false
+    default: "ghcr.io"
+  gh-username:
+    description: "GitHub username for registry authentication"
+    required: true
+  gh-token:
+    description: "GitHub token/PAT for registry authentication"
+    required: true
+  dockerfile-path:
+    description: "Path to the Dockerfile"
+    required: false
+    default: "./Dockerfile"
+  context:
+    description: "Build context path"
+    required: false
+    default: "."
+  platforms:
+    description: "Target platforms for multi-platform builds"
+    required: false
+    default: "linux/amd64"
+  image-name:
+    description: "Docker image name (without registry prefix)"
+    required: true
+  version-tag:
+    description: "Version tag for the image"
+    required: false
+    default: ""
+  additional-tags:
+    description: "Additional tags (newline separated)"
+    required: false
+    default: ""
+  build-args:
+    description: "Build arguments (newline separated key=value pairs)"
+    required: false
+    default: ""
+  push:
+    description: "Whether to push the image"
+    required: false
+    default: "true"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.checkout-ref }}
+
+    - name: Checkout (default)
+      uses: actions/checkout@v4
+
+    - name: Login to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.gh-username }}
+        password: ${{ inputs.gh-token }}
+
+    - name: Generate tags
+      id: tags
+      shell: bash
+      run: |
+        TAGS="${{ inputs.registry }}/${{ inputs.image-name }}:latest"
+
+        # Add SHA tag
+        TAGS="$TAGS,${{ inputs.registry }}/${{ inputs.image-name }}:${{ github.sha }}"
+
+        # Add version tag if provided
+        if [ -n "${{ inputs.version-tag }}" ]; then
+          TAGS="$TAGS,${{ inputs.registry }}/${{ inputs.image-name }}:${{ inputs.version-tag }}"
+        fi
+
+        # Add additional tags if provided
+        if [ -n "${{ inputs.additional-tags }}" ]; then
+          while IFS= read -r tag; do
+            if [ -n "$tag" ]; then
+              TAGS="$TAGS,${{ inputs.registry }}/${{ inputs.image-name }}:$tag"
+            fi
+          done <<< "${{ inputs.additional-tags }}"
+        fi
+
+        echo "tags=$TAGS" >> $GITHUB_OUTPUT
+
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: ${{ inputs.context }}
+        file: ${{ inputs.dockerfile-path }}
+        platforms: ${{ inputs.platforms }}
+        push: ${{ inputs.push }}
+        tags: ${{ steps.tags.outputs.tags }}
+        build-args: ${{ inputs.build-args }}
