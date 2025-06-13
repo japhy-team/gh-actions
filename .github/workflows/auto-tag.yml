@@ -1,0 +1,31 @@
+name: Auto Tag on Merge
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  GOPRIVATE: "github.com/japhy-team/*"
+
+jobs:
+  auto-tag:
+    runs-on: self-hosted
+    if: ${{ !contains(github.event.head_commit.message, '[skip-tag]') }}
+    outputs:
+      new-version: ${{ steps.auto-tag.outputs.new-version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_GO_MODULES_PAT }}
+
+      - name: Auto Tag
+        id: auto-tag
+        uses: ./../auto-tag
+        with:
+          github-token: ${{ secrets.GH_GO_MODULES_PAT }}
+          tag-prefix: "v"
+          default-bump: "patch"
+          skip-tag-keyword: "[skip-tag]"
