@@ -5,7 +5,7 @@ inputs:
   go-version:
     description: 'The Go version to use'
     required: false
-    default: '1.23'
+    default: '1.25'
   gh-go-modules-user:
     description: 'GitHub user for private Go modules'
     required: true
