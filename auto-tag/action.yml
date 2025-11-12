@@ -45,8 +45,12 @@ runs:
       id: get-pr-info
       shell: bash
       run: |
+        # Save commit message to file to handle multiline content safely
+        # Read from GitHub event JSON to avoid shell interpretation issues
+        jq -r '.head_commit.message // ""' "$GITHUB_EVENT_PATH" > commit_message.txt
+        
         # Get the PR number from the merge commit message
-        PR_NUMBER=$(echo "${{ github.event.head_commit.message }}" | grep -oP '#\K\d+' || echo "")
+        PR_NUMBER=$(cat commit_message.txt | grep -oP '#\K\d+' || echo "")
 
         if [ -n "$PR_NUMBER" ]; then
           echo "Found PR number: $PR_NUMBER"
@@ -76,8 +80,11 @@ runs:
           PR_BODY=$(cat pr_body.txt)
         fi
 
-        # Also check commit messages from the last merge
-        COMMIT_MESSAGES="${{ github.event.head_commit.message }}"
+        # Also check commit messages from the last merge (read from file)
+        COMMIT_MESSAGES=""
+        if [ -f commit_message.txt ]; then
+          COMMIT_MESSAGES=$(cat commit_message.txt)
+        fi
 
         # Combine PR body and commit messages for analysis
         CONTENT="$PR_BODY $COMMIT_MESSAGES"
@@ -195,6 +202,12 @@ runs:
         BUMP_TYPE="${{ steps.version-bump.outputs.bump-type }}"
         PR_NUMBER="${{ steps.get-pr-info.outputs.pr-number }}"
 
+        # Read commit message from file
+        COMMIT_MESSAGE=""
+        if [ -f commit_message.txt ]; then
+          COMMIT_MESSAGE=$(cat commit_message.txt)
+        fi
+
         # Prepare release notes
         RELEASE_NOTES="## What's Changed\n\n"
 
@@ -206,22 +219,22 @@ runs:
         RELEASE_NOTES+="**Previous version:** ${{ steps.get-latest-tag.outputs.latest-tag }}\n"
         RELEASE_NOTES+="**New version:** $NEW_VERSION\n\n"
 
-        # Add commit information
-        RELEASE_NOTES+="**Latest commit:** ${{ github.event.head_commit.message }}\n"
+        # Add commit information (jq will handle escaping automatically)
+        RELEASE_NOTES+="**Latest commit:** ${COMMIT_MESSAGE}\n"
         RELEASE_NOTES+="**Commit SHA:** ${{ github.sha }}\n"
 
-        # Create GitHub release
+        # Create GitHub release using jq for proper JSON escaping
+        jq -n \
+          --arg tag_name "$NEW_VERSION" \
+          --arg name "Release $NEW_VERSION" \
+          --arg body "$RELEASE_NOTES" \
+          '{tag_name: $tag_name, name: $name, body: $body, draft: false, prerelease: false}' | \
         curl -X POST \
           -H "Authorization: token ${{ inputs.github-token }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/${{ github.repository }}/releases" \
-          -d "{
-            \"tag_name\": \"$NEW_VERSION\",
-            \"name\": \"Release $NEW_VERSION\",
-            \"body\": \"$RELEASE_NOTES\",
-            \"draft\": false,
-            \"prerelease\": false
-          }"
+          -H "Content-Type: application/json" \
+          -d @- \
+          "https://api.github.com/repos/${{ github.repository }}/releases"
 
         echo "Created GitHub release for $NEW_VERSION"
 
