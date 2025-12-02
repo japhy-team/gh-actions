@@ -23,6 +23,7 @@ runs:
       uses: actions/setup-go@v6
       with:
         go-version: ${{ inputs.go-version }}
+        cache-dependency-path: go.sum
 
     - name: Set up Go access to private repositories
       shell: bash

@@ -35,6 +35,20 @@ runs:
       restore-keys: |
         ${{ runner.os }}-go-
 
+  - name: Debug cache manifest
+    shell: bash
+    run: |
+      echo "=== Checking for manifest.txt ==="
+      if [ -f manifest.txt ]; then
+        echo "Content of manifest.txt:"
+        cat manifest.txt
+      else
+        echo "manifest.txt not found in current directory"
+      fi
+      echo "=== Checking cache paths ==="
+      ls -la /home/runner/.cache/go-build 2>/dev/null || echo "go-build cache not found"
+      ls -la /home/runner/go/pkg/mod 2>/dev/null || echo "go mod cache not found"
+
   - name: code-coverage
     uses: fgrosse/go-coverage-report@v1.2.0
     with:
