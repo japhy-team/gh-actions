@@ -39,7 +39,7 @@ runs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git fetch origin
-        git pull --rebase origin ${{ github.head_ref }}
+        git pull --rebase --autostash origin ${{ github.head_ref }}
         git add README.md
         git commit -m "chore: Updated coverage badge."
         git push origin ${{ github.head_ref }}
