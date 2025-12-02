@@ -1,16 +1,16 @@
-name: 'Go Module Branch Validator'
-description: 'Ensures all github.com/japhy-team/* dependencies use commits from the main branch'
+name: "Go Module Branch Validator"
+description: "Ensures all github.com/japhy-team/* dependencies use commits from the main branch"
 
 inputs:
   go-version:
-    description: 'The Go version to use'
+    description: "The Go version to use"
     required: false
-    default: '1.23'
+    default: "1.23"
   gh-go-modules-user:
-    description: 'GitHub user for private Go modules'
+    description: "GitHub user for private Go modules"
     required: true
   gh-go-modules-pat:
-    description: 'GitHub PAT for private Go modules'
+    description: "GitHub PAT for private Go modules"
     required: true
 
 runs:
@@ -20,9 +20,10 @@ runs:
       uses: actions/checkout@v4
 
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v6
       with:
-        go-version: stable
+        go-version: ${{ inputs.go-version }}
+        cache: false
 
     - name: Set up Go modules authentication
       shell: bash

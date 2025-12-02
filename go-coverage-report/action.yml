@@ -1,31 +1,32 @@
-name: 'Go Test, Build, and Coverage'
-description: 'Runs tests, builds, and generates coverage reports for Go projects'
+name: "Go Test, Build, and Coverage"
+description: "Runs tests, builds, and generates coverage reports for Go projects"
 
 inputs:
   go-version:
-    description: 'The Go version to use'
+    description: "The Go version to use"
     required: false
-    default: '1.23'
+    default: "1.23"
   gh-go-modules-user:
-    description: 'GitHub user for private Go modules'
+    description: "GitHub user for private Go modules"
     required: true
   gh-go-modules-pat:
-    description: 'GitHub PAT for private Go modules'
+    description: "GitHub PAT for private Go modules"
     required: true
 
 runs:
   using: "composite"
   steps:
-  - name: Checkout
-    uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-  - name: Set up Go
-    uses: actions/setup-go@v4
-    with:
-      go-version: ${{ inputs.go-version }}
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version: ${{ inputs.go-version }}
+        cache: false
 
-  - name: code-coverage
-    uses: fgrosse/go-coverage-report@v1.2.0
-    with:
-      coverage-artifact-name: "code-coverage"
-      coverage-file-name: "coverage.out"
+    - name: code-coverage
+      uses: fgrosse/go-coverage-report@v1.2.0
+      with:
+        coverage-artifact-name: "code-coverage"
+        coverage-file-name: "coverage.out"
