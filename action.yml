@@ -17,31 +17,31 @@ runs:
   using: "composite"
   steps:
     - name: GO Test & Build
-      uses: japhy-team/gh-actions/go-test-n-build@main
+      uses: japhy-team/gh-actions/go-test-n-build@v0.1.0
       with:
         go-version: ${{ inputs.go-version }}
         gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
         gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
 
     - name: GO Badge
-      uses: japhy-team/gh-actions/go-badge@main
+      uses: japhy-team/gh-actions/go-badge@v0.1.0
       with:
         gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
         gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
 
     - name: Go Coverage Report
-      uses: japhy-team/gh-actions/go-coverage-report@main
+      uses: japhy-team/gh-actions/go-coverage-report@v0.1.0
       with:
         gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
         gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
 
     - name: GO Deadcode
-      uses: japhy-team/gh-actions/go-deadcode@main
+      uses: japhy-team/gh-actions/go-deadcode@v0.1.0
       with:
         gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
         gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}
     - name: GO modules check
-      uses: japhy-team/gh-actions/go-mod-check-branch@rdu-25-05-add-check-main
+      uses: japhy-team/gh-actions/go-mod-check-branch@v0.1.0
       with:
         gh-go-modules-user: ${{ inputs.gh-go-modules-user }}
         gh-go-modules-pat: ${{ inputs.gh-go-modules-pat }}

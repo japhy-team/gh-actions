@@ -34,7 +34,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Auto Tag
-        uses: japhy-team/gh-actions/auto-tag@main
+        uses: japhy-team/gh-actions/auto-tag@v0.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -43,7 +43,7 @@ jobs:
 
 ```yaml
 - name: Auto Tag
-  uses: japhy-team/gh-actions/auto-tag@main
+  uses: japhy-team/gh-actions/auto-tag@v0.1.0
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     tag-prefix: "v"
@@ -178,7 +178,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Auto Tag
-        uses: japhy-team/gh-actions/auto-tag@main
+        uses: japhy-team/gh-actions/auto-tag@v0.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
