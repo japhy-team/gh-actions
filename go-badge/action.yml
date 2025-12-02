@@ -38,10 +38,8 @@ runs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git fetch --all
-        git checkout ${{ github.head_ref }}
-        git pull --force origin ${{ github.head_ref }}
         git add README.md
         git commit -m "chore: Updated coverage badge."
-        git status
+        git fetch origin
+        git pull --rebase origin ${{ github.head_ref }}
         git push origin ${{ github.head_ref }}
